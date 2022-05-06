@@ -181,7 +181,7 @@ async function fetchHtml(urlToFetch, userAgent, forceGoogle = false) {
         result = await fetch(urlToFetch, {
             method: "GET",
             headers: {
-                "user-agent": userAgent,
+                "User-Agent": userAgent,
             },
         });
 
