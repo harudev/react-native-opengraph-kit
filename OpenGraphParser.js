@@ -1,9 +1,10 @@
-import { AllHtmlEntities } from 'html-entities';
+import { AllHtmlEntities } from "html-entities";
 
 const entities = new AllHtmlEntities();
 
 function findOGTags(content, url) {
-    const metaTagOGRegex = /<meta[^>]*(?:property=[ '"]*og:([^'"]*))?[^>]*(?:content=["]([^"]*)["])?[^>]*>/gi;
+    const metaTagOGRegex =
+        /<meta[^>]*(?:property=[ '"]*og:([^'"]*))?[^>]*(?:content=["]([^"]*)["])?[^>]*>/gi;
     const matches = content.match(metaTagOGRegex);
     const meta = {};
 
@@ -11,7 +12,7 @@ function findOGTags(content, url) {
         const metaPropertyRegex = /<meta[^>]*property=[ "]*og:([^"]*)[^>]*>/i;
         const metaContentRegex = /<meta[^>]*content=[ "]([^"]*)[^>]*>/i;
 
-        for (let i = matches.length; i--;) {
+        for (let i = matches.length; i--; ) {
             let propertyMatch;
             let contentMatch;
             let metaName;
@@ -33,9 +34,9 @@ function findOGTags(content, url) {
                 }
             } catch (error) {
                 if (__DEV__) {
-                    console.log('Error on ', matches[i]);
-                    console.log('propertyMatch', propertyMatch);
-                    console.log('contentMatch', contentMatch);
+                    console.log("Error on ", matches[i]);
+                    console.log("propertyMatch", propertyMatch);
+                    console.log("contentMatch", contentMatch);
                     console.log(error);
                 }
 
@@ -43,18 +44,18 @@ function findOGTags(content, url) {
             }
 
             if (metaValue.length > 0) {
-                if (metaValue[0] === '/') {
-                    if (metaValue.length <= 1 || metaValue[1] !== '/') {
-                        if (url[url.length - 1] === '/') {
+                if (metaValue[0] === "/") {
+                    if (metaValue.length <= 1 || metaValue[1] !== "/") {
+                        if (url[url.length - 1] === "/") {
                             metaValue = url + metaValue.substring(1);
                         } else {
                             metaValue = url + metaValue;
                         }
                     } else {
                         // handle protocol agnostic meta URLs
-                        if (url.indexOf('https://') === 0) {
+                        if (url.indexOf("https://") === 0) {
                             metaValue = `https:${metaValue}`;
-                        } else if (url.indexOf('http://') === 0) {
+                        } else if (url.indexOf("http://") === 0) {
                             metaValue = `http:${metaValue}`;
                         }
                     }
@@ -71,15 +72,17 @@ function findOGTags(content, url) {
 }
 
 function findHTMLMetaTags(content, url) {
-    const metaTagHTMLRegex = /<meta(?:[^>]*(?:name|itemprop)=[ '"]([^'"]*))?[^>]*(?:[^>]*content=["]([^"]*)["])?[^>]*>/gi;
+    const metaTagHTMLRegex =
+        /<meta(?:[^>]*(?:name|itemprop)=[ '"]([^'"]*))?[^>]*(?:[^>]*content=["]([^"]*)["])?[^>]*>/gi;
     const matches = content.match(metaTagHTMLRegex);
     const meta = {};
 
     if (matches) {
-        const metaPropertyRegex = /<meta[^>]*(?:name|itemprop)=[ "]([^"]*)[^>]*>/i;
+        const metaPropertyRegex =
+            /<meta[^>]*(?:name|itemprop)=[ "]([^"]*)[^>]*>/i;
         const metaContentRegex = /<meta[^>]*content=[ "]([^"]*)[^>]*>/i;
 
-        for (let i = matches.length; i--;) {
+        for (let i = matches.length; i--; ) {
             let propertyMatch;
             let contentMatch;
             let metaName;
@@ -101,9 +104,9 @@ function findHTMLMetaTags(content, url) {
                 }
             } catch (error) {
                 if (__DEV__) {
-                    console.log('Error on ', matches[i]);
-                    console.log('propertyMatch', propertyMatch);
-                    console.log('contentMatch', contentMatch);
+                    console.log("Error on ", matches[i]);
+                    console.log("propertyMatch", propertyMatch);
+                    console.log("contentMatch", contentMatch);
                     console.log(error);
                 }
 
@@ -111,18 +114,18 @@ function findHTMLMetaTags(content, url) {
             }
 
             if (metaValue.length > 0) {
-                if (metaValue[0] === '/') {
-                    if (metaValue.length <= 1 || metaValue[1] !== '/') {
-                        if (url[url.length - 1] === '/') {
+                if (metaValue[0] === "/") {
+                    if (metaValue.length <= 1 || metaValue[1] !== "/") {
+                        if (url[url.length - 1] === "/") {
                             metaValue = url + metaValue.substring(1);
                         } else {
                             metaValue = url + metaValue;
                         }
                     } else {
                         // handle protocol agnostic meta URLs
-                        if (url.indexOf('https://') === 0) {
+                        if (url.indexOf("https://") === 0) {
                             metaValue = `https:${metaValue}`;
-                        } else if (url.indexOf('http://') === 0) {
+                        } else if (url.indexOf("http://") === 0) {
                             metaValue = `http:${metaValue}`;
                         }
                     }
@@ -158,7 +161,7 @@ function parseMeta(html, url, options) {
             };
         } catch (error) {
             if (__DEV__) {
-                console.log('Error in fallback', error);
+                console.log("Error in fallback", error);
             }
         }
     }
@@ -166,22 +169,19 @@ function parseMeta(html, url, options) {
     return meta;
 }
 
-async function fetchHtml(urlToFetch, forceGoogle = false) {
+async function fetchHtml(urlToFetch, userAgent, forceGoogle = false) {
     let result;
 
-    let userAgent
-        = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36';
-
     if (forceGoogle) {
-        userAgent
-            = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+        userAgent =
+            "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
     }
 
     try {
         result = await fetch(urlToFetch, {
-            method: 'GET',
+            method: "GET",
             headers: {
-                'user-agent': userAgent,
+                "user-agent": userAgent,
             },
         });
 
@@ -192,8 +192,8 @@ async function fetchHtml(urlToFetch, forceGoogle = false) {
         return result.text().then((resultParsed) => resultParsed);
     } catch (responseOrError) {
         if (responseOrError.message && __DEV__) {
-            if (responseOrError.message === 'Network request failed') {
-                console.log(urlToFetch, 'could not be fetched');
+            if (responseOrError.message === "Network request failed") {
+                console.log(urlToFetch, "could not be fetched");
             } else {
                 console.log(responseOrError);
             }
@@ -203,7 +203,7 @@ async function fetchHtml(urlToFetch, forceGoogle = false) {
         return responseOrError.text().then((error) => {
             if (__DEV__) {
                 console.log(
-                    'An error has occured while fetching url content',
+                    "An error has occured while fetching url content",
                     error
                 );
             }
@@ -214,7 +214,7 @@ async function fetchHtml(urlToFetch, forceGoogle = false) {
 
 async function fetchJSON(urlToFetch, urlOfVideo) {
     try {
-        const result = await fetch(urlToFetch, { method: 'GET' });
+        const result = await fetch(urlToFetch, { method: "GET" });
 
         if (result.status >= 400) {
             throw result;
@@ -236,13 +236,14 @@ async function fetchJSON(urlToFetch, urlOfVideo) {
 }
 
 function getUrls(contentToMatch) {
-    const regexp = /(?:(?=[\s`!()\[\]{};:'".,<>?«»“”‘’])|\b)((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/|[a-z0-9.\-]+[.](?:com|org|net))(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))*(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]|\b))/gi;
+    const regexp =
+        /(?:(?=[\s`!()\[\]{};:'".,<>?«»“”‘’])|\b)((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/|[a-z0-9.\-]+[.](?:com|org|net))(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))*(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]|\b))/gi;
     const urls = contentToMatch.match(regexp);
     const urlsToReturn = [];
 
     if (urls && urls.length) {
         urls.forEach((url) => {
-            if (url.toLowerCase().indexOf('http') === 0) {
+            if (url.toLowerCase().indexOf("http") === 0) {
                 urlsToReturn.push(url);
             } else {
                 urlsToReturn.push(`http://${url}`);
@@ -250,7 +251,7 @@ function getUrls(contentToMatch) {
         });
     } else {
         if (__DEV__) {
-            console.log('Could not find an html link');
+            console.log("Could not find an html link");
         }
     }
 
@@ -258,8 +259,9 @@ function getUrls(contentToMatch) {
 }
 
 async function extractMeta(
-    textContent = '',
-    options = { fallbackOnHTMLTags: true }
+    textContent = "",
+    options = { fallbackOnHTMLTags: true },
+    userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36"
 ) {
     try {
         const urls = getUrls(textContent);
@@ -268,22 +270,20 @@ async function extractMeta(
         let i = 0;
 
         while (i < urls.length) {
-            if (urls[i].indexOf('youtube.com') >= 0) {
+            if (urls[i].indexOf("youtube.com") >= 0) {
                 metaData.push(
                     await fetchJSON(
-                        `https://www.youtube.com/oembed?url=${
-                            urls[i]
-                        }&format=json`,
+                        `https://www.youtube.com/oembed?url=${urls[i]}&format=json`,
                         urls[i]
                     )
                 );
-            } else { /* eslint-disable no-loop-func */
+            } else {
+                /* eslint-disable no-loop-func */
                 metaData.push(
-                    await fetchHtml(urls[i])
-                        .then((html) => ({
-                            ...html ? parseMeta(html, urls[i], options) : {},
-                            url: urls[i],
-                        }))
+                    await fetchHtml(urls[i], userAgent).then((html) => ({
+                        ...(html ? parseMeta(html, urls[i], options) : {}),
+                        url: urls[i],
+                    }))
                 );
             }
 
